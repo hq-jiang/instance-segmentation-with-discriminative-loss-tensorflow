@@ -18,7 +18,6 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.cm as cm
 
-sys.path.append('../base')
 import utils
 from loss import discriminative_loss
 import datagenerator
@@ -30,10 +29,9 @@ import clustering
 def run():
     num_classes = 3
     image_shape = (512, 512)
-    data_dir = os.path.join('..', '..', 'data')
-    runs_dir = './runs'
-    model_dir = '../semantic/saved_model'
-    output_dir = './saved_model'
+    data_dir = os.path.join('.', 'data')
+    model_dir = os.path.join('.', 'pretrained_semantic_model')
+    output_dir = os.path.join('.', 'saved_model')
     log_dir = './log'
 
     image_paths = glob(os.path.join(data_dir, 'images', '*.png'))
@@ -44,7 +42,6 @@ def run():
     
     #image_paths = image_paths[0:10]
     #label_paths = label_paths[0:10]
-
 
     X_train, X_valid, y_train, y_valid = train_test_split(image_paths, label_paths, test_size=0.10, random_state=42)
 

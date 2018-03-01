@@ -78,18 +78,19 @@ def save_label_images(output_dir, data, instancewise=True):
             cv2.imwrite(output_path, img)
             counter += 1
 
-mode='train'
-input_dir = './train_set'
-json_string = 'label_data_*.json'
-output_dir = '.'
 
-if not os.path.isdir('images'):
-	os.mkdir('images', 0775)
-if not os.path.isdir('labels'):
-	os.mkdir('labels', 0775)
+if __name__=='__main__':
+	mode='train'
+	input_dir = './train_set'
+	json_string = 'label_data_*.json'
+	output_dir = '.'
 
-data = read_json(input_dir, json_string)
-img_paths = read_image_strings(data, input_dir)
+	if not os.path.isdir('images'):
+		os.mkdir('images', 0775)
+	if not os.path.isdir('labels'):
+		os.mkdir('labels', 0775)
 
-#save_input_images(output_dir, img_paths, mode)
-save_label_images(output_dir, data)
+	data = read_json(input_dir, json_string)
+	img_paths = read_image_strings(data, input_dir)
+	save_input_images(output_dir, img_paths, mode)
+	save_label_images(output_dir, data)
