@@ -1,0 +1,6 @@
+model_checkpoint_path: "saved_model-29999"
+all_model_checkpoint_paths: "saved_model-9999"
+all_model_checkpoint_paths: "saved_model-14999"
+all_model_checkpoint_paths: "saved_model-19999"
+all_model_checkpoint_paths: "saved_model-24999"
+all_model_checkpoint_paths: "saved_model-29999"
