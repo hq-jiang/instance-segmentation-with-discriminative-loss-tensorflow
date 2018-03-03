@@ -40,8 +40,9 @@ Tensorflow implementation of [Semantic Instance Segmentation with a Discriminati
 `python data/tusimple_dataset_processing.py <train_data_dir>`  
 This should create the following images and labels folders:  
 | data  
+├── train_set  
 ├── images  
-├── labels  
+└── labels  
 3. For training on the dataset execute:  
 `python training.py`  
 alternatively use optional parameters (default parameters in this example):   
