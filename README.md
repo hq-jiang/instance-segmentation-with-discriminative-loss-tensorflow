@@ -28,13 +28,20 @@ Tensorflow implementation of [Semantic Instance Segmentation with a Discriminati
 
 #### Training
 
-1. Download the [TuSimple training dataset](http://benchmark.tusimple.ai/#/t/1) and extract its contents to the `data` folder.
+1. Download the [TuSimple training dataset](http://benchmark.tusimple.ai/#/t/1) and extract its contents to the `data` folder. The folder structure should look like this:  
+| data  
+├── train_set  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── clips  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── label_data_0313.json  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── label_data_0531.json  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── label_data_0601.json  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── readme.md
 2. Run the following script to prepare images and labels.  
 `python data/tusimple_dataset_processing.py <train_data_dir>`  
-This should create the following folder structure:  
-├── data  
-│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── images  
-│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── labels  
+This should create the following images and labels folders:  
+| data  
+├── images  
+├── labels  
 3. For training on the dataset execute:  
 `python training.py`  
 alternatively use optional parameters (default parameters in this example):   
