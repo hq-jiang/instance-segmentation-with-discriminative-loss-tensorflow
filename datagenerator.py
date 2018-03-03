@@ -30,7 +30,7 @@ def get_batches_fn(batch_size, image_shape, image_paths, label_paths):
     :return: Batches of training data
     """
 
-    #print 'Number of total labels:', len(label_paths)
+    #print ('Number of total labels:', len(label_paths))
     assert len(image_paths)==len(label_paths), 'Number of images and labels do not match'
 
     image_paths.sort()
@@ -59,9 +59,9 @@ def get_batches_fn(batch_size, image_shape, image_paths, label_paths):
 
 
 def get_validation_batch(image_shape):
-    valid_image_paths = ['../../data/images/0000.png']
+    valid_image_paths = [os.path.join('.','data','images','0000.png')]
 
-    valid_label_paths = ['../../data/labels/0000.png']
+    valid_label_paths = [os.path.join('.','data','labels','0000.png')]
 
     images = []
     gt_images = []
@@ -87,7 +87,7 @@ if __name__=="__main__":
     get_batches_fn = gen_batch_function(('../tusimple_api/clean_data'), image_shape)
     images, gt_images = get_batches_fn(batch_size).next()
 
-    print gt_images.shape
+    print (gt_images.shape)
     assert len(images)==len(gt_images) and len(images)==batch_size
 
     for i in range(batch_size):
@@ -96,7 +96,7 @@ if __name__=="__main__":
         plt.imshow(images[i])
         plt.subplot(212)
         plt.imshow(gt_images[i], cmap='gray')
-        print 'Unique colors', np.unique(gt_images[i])
+        print ('Unique colors', np.unique(gt_images[i]))
         assert np.unique(gt_images[i]).size<=6, 'To many instance colors'
 
     plt.show()

@@ -15,10 +15,10 @@ COLOR=[np.array([255,0,0]),
 
 def cluster(prediction, bandwidth):
 	ms = MeanShift(bandwidth, bin_seeding=True)
-	print 'Mean shift clustering, might take some time ...'
+	print ('Mean shift clustering, might take some time ...')
 	tic = time.time()
 	ms.fit(prediction)
-	print 'time for clustering', time.time() - tic
+	print ('time for clustering', time.time() - tic)
 	labels = ms.labels_
 	cluster_centers = ms.cluster_centers_
 	
@@ -32,7 +32,7 @@ def get_instance_masks(prediction, bandwidth):
 	instance_masks = []
 	for i in range(batch_size):
 		num_clusters, labels, cluster_centers = cluster(prediction[i].reshape([h*w, feature_dim]), bandwidth)
-		print 'Number of predicted clusters', num_clusters
+		print ('Number of predicted clusters', num_clusters)
 		labels = np.array(labels, dtype=np.uint8).reshape([h,w])
 		mask = np.zeros([h,w,3], dtype=np.uint8)
 
@@ -53,7 +53,7 @@ def save_instance_masks(prediction,output_dir, bandwidth, count):
 	instance_masks = []
 	for i in range(batch_size):
 		num_clusters, labels, cluster_centers = cluster(prediction[i].reshape([h*w, feature_dim]), bandwidth)
-		print 'Number of predicted clusters', num_clusters
+		print ('Number of predicted clusters', num_clusters)
 		labels = np.array(labels, dtype=np.uint8).reshape([h,w])
 		mask = np.zeros([h,w,3], dtype=np.uint8)
 

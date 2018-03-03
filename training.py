@@ -27,7 +27,6 @@ import clustering
 
 
 def run():
-    num_classes = 3
     image_shape = (512, 512)
     data_dir = os.path.join('.', 'data')
     model_dir = os.path.join('.', 'pretrained_semantic_model')
@@ -45,14 +44,14 @@ def run():
 
     X_train, X_valid, y_train, y_valid = train_test_split(image_paths, label_paths, test_size=0.10, random_state=42)
 
-    print 'Number of train samples', len(y_train)
-    print 'Number of valid samples', len(y_valid)
+    print ('Number of train samples', len(y_train))
+    print ('Number of valid samples', len(y_valid))
 
     ### Debugging
     debug_clustering = True
     bandwidth = 0.7
-    cluster_cycle = 2000
-    eval_cycle=500
+    cluster_cycle = 5000
+    eval_cycle=1000
     save_cycle=15000
 
     ### Hyperparameters
@@ -62,7 +61,7 @@ def run():
     learning_rate_decay_rate = 0.96
     learning_rate_decay_interval = 5000
 
-    feature_dim = 2
+    feature_dim = 3
     delta_v = 0.5
     delta_d = 1.5
     param_var = 1.
@@ -71,7 +70,7 @@ def run():
 
 
 
-    param_string = 'var'+str(param_var)+'_dist'+str(param_dist)+'_reg'+str(param_reg) \
+    param_string = 'fdim'+str(feature_dim)+'_var'+str(param_var)+'_dist'+str(param_dist)+'_reg'+str(param_reg) \
                 +'_dv'+str(delta_v)+'_dd'+str(delta_d) \
                 +'_lr'+str(starter_learning_rate)+'_btch'+str(batch_size)
 
@@ -80,8 +79,8 @@ def run():
 
     ### Limit GPU memory usage due to ocassional crashes
     config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    config.gpu_options.per_process_gpu_memory_fraction = 0.5 
+    #config.gpu_options.allow_growth = True
+    #config.gpu_options.per_process_gpu_memory_fraction = 0.5 
 
 
     with tf.Session(config=config) as sess:
@@ -93,7 +92,7 @@ def run():
         last_prelu = utils.load_enet(sess, model_dir, input_image, batch_size)
         prediction = utils.add_transfer_layers_and_initialize(sess, last_prelu, feature_dim)
 
-        print 'Number of parameters in the model', utils.count_parameters()
+        print ('Number of parameters in the model', utils.count_parameters())
         ### Set up learning rate decay
         global_step = tf.Variable(0, trainable=False)
         sess.run(global_step.initializer)
@@ -120,7 +119,7 @@ def run():
         
         ### Check if image and labels match
         valid_image_chosen, valid_label_chosen = datagenerator.get_validation_batch(image_shape)
-        print valid_image_chosen.shape
+        print (valid_image_chosen.shape)
         #visualization.save_image_overlay(valid_image_chosen.copy(), valid_label_chosen.copy())
 
 
@@ -148,7 +147,7 @@ def run():
                                             feed_dict={input_image: image, correct_label: label})
                 else:
                     # First run normal training step and record summaries
-                    print 'Evaluating on chosen images ...'
+                    print ('Evaluating on chosen images ...')
                     _, summary, step_prediction, step_loss, step_l_var, step_l_dist, step_l_reg = sess.run([
                                         train_op,
                                         summary_op_train,
@@ -177,16 +176,16 @@ def run():
                 ### Save intermediate model
                 if (step_train%save_cycle==(save_cycle-1)):
                     try:
-                        print 'Saving model ...'
+                        print ('Saving model ...')
                         saver.save(sess, os.path.join(output_dir, 'model.ckpt'), global_step=step_train)
                     except:
-                        print 'FAILED saving model'
+                        print ('FAILED saving model')
                 #print 'gradient', step_gradient
-                print 'step', step_train, '\tloss', step_loss, '\tl_var', step_l_var, '\tl_dist', step_l_dist, '\tl_reg', step_l_reg, '\tcurrent lr', lr
+                print ('step', step_train, '\tloss', step_loss, '\tl_var', step_l_var, '\tl_dist', step_l_dist, '\tl_reg', step_l_reg, '\tcurrent lr', lr)
 
 
             ### Regular validation
-            print 'Evaluating current model ...'
+            print ('Evaluating current model ...')
             for image, label in datagenerator.get_batches_fn(batch_size, image_shape, X_valid, y_valid):
                 if step_valid%100==0:
                     summary, step_prediction, step_loss, step_l_var, step_l_dist, step_l_reg = sess.run([
@@ -209,7 +208,7 @@ def run():
                 step_valid += 1
 
 
-                print 'step_valid', step_valid, 'valid loss', step_loss, '\tvalid l_var', step_l_var, '\tvalid l_dist', step_l_dist, '\tvalid l_reg', step_l_reg
+                print ('step_valid', step_valid, 'valid loss', step_loss, '\tvalid l_var', step_l_var, '\tvalid l_dist', step_l_dist, '\tvalid l_reg', step_l_reg)
 
         saver = tf.train.Saver()
         saver.save(sess, os.path.join(output_dir, 'model.ckpt'), global_step=step_train)

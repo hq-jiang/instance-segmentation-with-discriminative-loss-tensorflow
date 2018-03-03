@@ -62,12 +62,12 @@ def get_trainable_variables_and_initialize(sess, debug=False):
                                                              #'ENet/bottleneck2' not in var.name
                                                              #]
     if debug:
-        print 'All trainable variables'
+        print ('All trainable variables')
         for i, var in enumerate(tf.trainable_variables()):
-            print i, var
-        print 'variables which are actually trained'
+            print (i, var)
+        print ('variables which are actually trained')
         for var in trainables:
-            print var
+            print (var)
 
     ### Design choice: reset decoder network to default initialize weights
     # Reset all trainable variables
