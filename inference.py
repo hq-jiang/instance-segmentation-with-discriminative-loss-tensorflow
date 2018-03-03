@@ -121,7 +121,6 @@ if __name__=='__main__':
             instance_mask = cv2.addWeighted(np.squeeze(image), 1, instance_mask, 0.3, 0)
             instance_mask = cv2.resize(instance_mask, (1280,720))
             clust_time = time.time()-tic
-            print 'Total time', cluster_time
             cluster_time += clust_time
             cv2.imwrite(output_file_name, cv2.cvtColor(instance_mask, cv2.COLOR_RGB2BGR))
 
