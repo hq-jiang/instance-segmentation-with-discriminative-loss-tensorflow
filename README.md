@@ -24,7 +24,7 @@ Tensorflow implementation of [Semantic Instance Segmentation with a Discriminati
 
 #### Inference
 1. To test the inference of the trained model execute:  
-`python inference.py --modeldir trained_model`
+`python inference.py --modeldir trained_model --outdir inference_test/results`  
 
 #### Training
 
