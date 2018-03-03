@@ -55,7 +55,7 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-m','--modeldir', default='trained_model', help="Directory of trained model")
     parser.add_argument('-i', '--indir', default=os.path.join('inference_test', 'images'), help='Input image directory (jpg format)')
-    parser.add_argument('o', '--outdir', default=os.path.join('inference_test', 'results'), help='Output directory for inference images')
+    parser.add_argument('-o', '--outdir', default=os.path.join('inference_test', 'results'), help='Output directory for inference images')
     args = parser.parse_args()
 
     data_dir = args.indir
