@@ -55,9 +55,9 @@ if __name__=='__main__':
     data_dir = os.path.join('./inference_test', 'images')
     video_file = os.path.join('./inference_test', 'videos', 'project_video.mp4')
     output_dir = os.path.join('./inference_test', 'results')
-    checkpoint_dir = './01_saved_model'
+    checkpoint_dir = './saved_model'
 
-    image_paths = glob(os.path.join(data_dir, '*.png'))
+    image_paths = glob(os.path.join(data_dir, '*.jpg'))
     image_paths.sort()
 
     num_images = len(image_paths)
@@ -76,86 +76,47 @@ if __name__=='__main__':
         input_image = tf.placeholder(tf.float32, shape=(None, image_shape[1], image_shape[0], 3))
         logits = rebuild_graph(sess, checkpoint_dir, input_image, batch_size, feature_dim)
 
-        if True:
-            inference_time = 0
-            cluster_time = 0
-            for i, path in enumerate(image_paths):
-                
-                image = cv2.resize(cv2.imread(path), image_shape, interpolation=cv2.INTER_LINEAR)
-                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                image = np.expand_dims(image, axis=0)
-    
-                tic = time.time()
-                prediction = sess.run(logits, feed_dict={input_image: image})
-                pred_time = time.time()-tic
-                print 'Inference time', pred_time
-                inference_time += pred_time
-                
-    
-                pred_color = np.squeeze(prediction.copy())
-                print 'Save prediction', i 
-                #save_image_with_features_as_color(pred_color)
-                
-                pred_cluster = prediction.copy()
-                tic = time.time()
-                instance_mask = get_instance_masks(pred_cluster, bandwidth=1.)[0]
-                save_instance_masks(prediction, output_dir, bandwidth=1., count=i)
-                print instance_mask.shape
-                output_file_name = os.path.join(output_dir, 'cluster_{}.png'.format(str(i).zfill(4)))
-                colors, counts = np.unique(instance_mask.reshape(image_shape[0]*image_shape[1],3), 
-                                                return_counts=True, axis=0)
-                max_count = 0
-                for color, count in zip(colors, counts):
-                    if count > max_count:
-                        max_count = count
-                        bg_color = color
-                ind = np.where(instance_mask==bg_color)
-                instance_mask[ind] = 0.
-                instance_mask = cv2.addWeighted(np.squeeze(image), 1, instance_mask, 0.3, 0)
-                instance_mask = cv2.resize(instance_mask, (1280,720))
-                clust_time = time.time()-tic
-                print 'Total time', cluster_time
-                cluster_time += clust_time
-                cv2.imwrite(output_file_name, cv2.cvtColor(instance_mask, cv2.COLOR_RGB2BGR))
+        inference_time = 0
+        cluster_time = 0
+        for i, path in enumerate(image_paths):
+            
+            image = cv2.resize(cv2.imread(path), image_shape, interpolation=cv2.INTER_LINEAR)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = np.expand_dims(image, axis=0)
 
-            print 'Mean inference time:', inference_time/num_images, 'fps:', num_images/inference_time
-            print 'Mean cluster time:', cluster_time/num_images, 'fps:', num_images/cluster_time
-            print 'Mean total time:', cluster_time/num_images + inference_time/num_images, 'fps:', 1./(cluster_time/num_images + inference_time/num_images)
+            tic = time.time()
+            prediction = sess.run(logits, feed_dict={input_image: image})
+            pred_time = time.time()-tic
+            print 'Inference time', pred_time
+            inference_time += pred_time
+            
 
-        else:
-            vidcap = imageio.get_reader(video_file,  'ffmpeg')
-            print video_file
-            success = True
-            for i, im in enumerate(vidcap):
-    
-                print 'step', i
-                image = cv2.resize(im, image_shape, interpolation=cv2.INTER_LINEAR)
-                #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                image = np.expand_dims(image, axis=0)
-    
-                tic = time.time()
-                prediction = sess.run(logits, feed_dict={input_image: image})
-                print 'Inference time', time.time()-tic
-                
-    
-                pred_color = np.squeeze(prediction.copy())
-                print 'Save prediction', i 
-                #save_image_with_features_as_color(pred_color)
-                
-                pred_cluster = prediction.copy()
-                instance_mask = get_instance_masks(pred_cluster, bandwidth=1.0)[0]
-                output_file_name = os.path.join(output_dir, 'cluster_{}.png'.format(str(i).zfill(4)))
-                colors, counts = np.unique(instance_mask.reshape(image_shape[0]*image_shape[1],3), 
-                                                return_counts=True, axis=0)
-                max_count = 0
-                for color, count in zip(colors, counts):
-                    if count > max_count:
-                        max_count = count
-                        bg_color = color
-                ind = np.where(instance_mask==bg_color)
-                instance_mask[ind] = 0.
-                kernel = np.ones((3,3),np.uint8)
-                instance_mask = cv2.erode(instance_mask,kernel,iterations = 1)
-                instance_mask = cv2.addWeighted(np.squeeze(image), 1, instance_mask, 0.3, 0)
-                instance_mask = cv2.resize(instance_mask, (1280,720))
-                cv2.imwrite(output_file_name, cv2.cvtColor(instance_mask, cv2.COLOR_RGB2BGR))
+            pred_color = np.squeeze(prediction.copy())
+            print 'Save prediction', i 
+            #save_image_with_features_as_color(pred_color)
+            
+            pred_cluster = prediction.copy()
+            tic = time.time()
+            instance_mask = get_instance_masks(pred_cluster, bandwidth=1.)[0]
+            #save_instance_masks(prediction, output_dir, bandwidth=1., count=i)
+            print instance_mask.shape
+            output_file_name = os.path.join(output_dir, 'cluster_{}.png'.format(str(i).zfill(4)))
+            colors, counts = np.unique(instance_mask.reshape(image_shape[0]*image_shape[1],3), 
+                                            return_counts=True, axis=0)
+            max_count = 0
+            for color, count in zip(colors, counts):
+                if count > max_count:
+                    max_count = count
+                    bg_color = color
+            ind = np.where(instance_mask==bg_color)
+            instance_mask[ind] = 0.
+            instance_mask = cv2.addWeighted(np.squeeze(image), 1, instance_mask, 0.3, 0)
+            instance_mask = cv2.resize(instance_mask, (1280,720))
+            clust_time = time.time()-tic
+            print 'Total time', cluster_time
+            cluster_time += clust_time
+            cv2.imwrite(output_file_name, cv2.cvtColor(instance_mask, cv2.COLOR_RGB2BGR))
+
+        print 'Mean inference time:', inference_time/num_images, 'fps:', num_images/inference_time
+        print 'Mean cluster time:', cluster_time/num_images, 'fps:', num_images/cluster_time
+        print 'Mean total time:', cluster_time/num_images + inference_time/num_images, 'fps:', 1./(cluster_time/num_images + inference_time/num_images)
