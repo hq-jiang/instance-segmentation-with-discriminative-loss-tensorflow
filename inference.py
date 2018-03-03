@@ -1,11 +1,11 @@
 import os
 import os.path
 
+import argparse
 from glob import glob
 import numpy as np
 import cv2
 import tensorflow as tf
-import imageio
 
 slim = tf.contrib.slim
 from enet import ENet, ENet_arg_scope
@@ -52,10 +52,18 @@ def save_image_with_features_as_color(pred):
 
 if __name__=='__main__':
 
-    data_dir = os.path.join('./inference_test', 'images')
-    video_file = os.path.join('./inference_test', 'videos', 'project_video.mp4')
-    output_dir = os.path.join('./inference_test', 'results')
-    checkpoint_dir = './saved_model'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m','--modeldir', default='trained_model', help="Directory of trained model")
+    parser.add_argument('-i', '--indir', default=os.path.join('inference_test', 'images'), help='Input image directory (jpg format)')
+    parser.add_argument('o', '--outdir', default=os.path.join('inference_test', 'results'), help='Output directory for inference images')
+    args = parser.parse_args()
+
+    data_dir = args.indir
+    output_dir = args.outdir
+    checkpoint_dir = args.modeldir
+
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
 
     image_paths = glob(os.path.join(data_dir, '*.jpg'))
     image_paths.sort()
