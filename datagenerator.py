@@ -58,10 +58,10 @@ def get_batches_fn(batch_size, image_shape, image_paths, label_paths):
         yield np.array(images), np.array(gt_images)
 
 
-def get_validation_batch(image_shape):
-    valid_image_paths = [os.path.join('.','data','images','0000.png')]
+def get_validation_batch(data_dir, image_shape):
+    valid_image_paths = [os.path.join(data_dir,'images','0000.png')]
 
-    valid_label_paths = [os.path.join('.','data','labels','0000.png')]
+    valid_label_paths = [os.path.join(data_dir,'labels','0000.png')]
 
     images = []
     gt_images = []
@@ -82,21 +82,4 @@ def get_validation_batch(image_shape):
 
 
 if __name__=="__main__":
-    image_shape = (160, 320)
-    batch_size = 1
-    get_batches_fn = gen_batch_function(('../tusimple_api/clean_data'), image_shape)
-    images, gt_images = get_batches_fn(batch_size).next()
-
-    print (gt_images.shape)
-    assert len(images)==len(gt_images) and len(images)==batch_size
-
-    for i in range(batch_size):
-        plt.figure(i)
-        plt.subplot(211)
-        plt.imshow(images[i])
-        plt.subplot(212)
-        plt.imshow(gt_images[i], cmap='gray')
-        print ('Unique colors', np.unique(gt_images[i]))
-        assert np.unique(gt_images[i]).size<=6, 'To many instance colors'
-
-    plt.show()
+   pass

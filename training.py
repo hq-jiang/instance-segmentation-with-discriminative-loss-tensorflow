@@ -5,13 +5,13 @@ import sys
 import warnings
 import copy
 from glob import glob
+import argparse
 
 import numpy as np
 import cv2
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from tensorflow.contrib.layers.python.layers import initializers
-
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -27,11 +27,34 @@ import clustering
 
 
 def run():
+    parser = argparse.ArgumentParser()
+    # Directories
+    parser.add_argument('-s','--srcdir', default='data', help="Source directory of TuSimple dataset")
+    parser.add_argument('-m', '--modeldir', default='pretrained_semantic_model', help="Output directory of extracted data")
+    parser.add_argument('-o', '--outdir', default='saved_model', help="Directory for trained model")
+    parser.add_argument('-l', '--logdir', default='log', help="Log directory for tensorboard and evaluation files")
+    # Hyperparameters
+    parser.add_argument('--epochs', type=int, default=50, help="Number of epochs")
+    parser.add_argument('--var', type=float, default=1., help="Weight of variance loss")
+    parser.add_argument('--dist', type=float, default=1., help="Weight of distance loss")
+    parser.add_argument('--reg', type=float, default=0.001, help="Weight of regularization loss")
+    parser.add_argument('--dvar', type=float, default=0.5, help="Cutoff variance")
+    parser.add_argument('--ddist', type=float, default=1.5, help="Cutoff distance")
+
+    args = parser.parse_args()
+
+    if not os.path.isdir(args.srcdir):
+        raise IOError('Directory does not exist')
+    if not os.path.isdir(args.modeldir):
+        raise IOError('Directory does not exist')
+    if not os.path.isdir(args.logdir):
+        os.mkdir(args.logdir)
+
     image_shape = (512, 512)
-    data_dir = os.path.join('.', 'data')
-    model_dir = os.path.join('.', 'pretrained_semantic_model')
-    output_dir = os.path.join('.', 'saved_model')
-    log_dir = './log'
+    data_dir = args.srcdir #os.path.join('.', 'data')
+    model_dir = args.modeldir
+    output_dir = args.outdir
+    log_dir = args.logdir
 
     image_paths = glob(os.path.join(data_dir, 'images', '*.png'))
     label_paths = glob(os.path.join(data_dir, 'labels', '*.png'))
@@ -47,6 +70,7 @@ def run():
     print ('Number of train samples', len(y_train))
     print ('Number of valid samples', len(y_valid))
 
+
     ### Debugging
     debug_clustering = True
     bandwidth = 0.7
@@ -55,20 +79,18 @@ def run():
     save_cycle=15000
 
     ### Hyperparameters
-    epochs = 50
+    epochs = args.epochs
     batch_size = 1
     starter_learning_rate = 1e-4
     learning_rate_decay_rate = 0.96
     learning_rate_decay_interval = 5000
 
     feature_dim = 3
-    delta_v = 0.5
-    delta_d = 1.5
-    param_var = 1.
-    param_dist = 1.
-    param_reg = 0.001
-
-
+    param_var = args.var
+    param_dist = args.dist
+    param_reg = args.reg
+    delta_v = args.dvar
+    delta_d = args.ddist
 
     param_string = 'fdim'+str(feature_dim)+'_var'+str(param_var)+'_dist'+str(param_dist)+'_reg'+str(param_reg) \
                 +'_dv'+str(delta_v)+'_dd'+str(delta_d) \
@@ -77,6 +99,7 @@ def run():
     if not os.path.exists(os.path.join(log_dir, param_string)):
         os.makedirs(os.path.join(log_dir, param_string))            
 
+    
     ### Limit GPU memory usage due to ocassional crashes
     config = tf.ConfigProto()
     #config.gpu_options.allow_growth = True
@@ -118,7 +141,7 @@ def run():
 
         
         ### Check if image and labels match
-        valid_image_chosen, valid_label_chosen = datagenerator.get_validation_batch(image_shape)
+        valid_image_chosen, valid_label_chosen = datagenerator.get_validation_batch(data_dir, image_shape)
         print (valid_image_chosen.shape)
         #visualization.save_image_overlay(valid_image_chosen.copy(), valid_label_chosen.copy())
 
