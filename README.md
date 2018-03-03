@@ -8,7 +8,7 @@ Tensorflow implementation of [Semantic Instance Segmentation with a Discriminati
 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   └── __tusimple_dataset_processing.py__ processes the TuSimple dataset  
 ├── __inference_test__ inference related data  
 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   └── __images__ for testing the inference    
-├── __pretrained_semantic_model__  pretrained model for finetuning  
+├── __trained_model__  pretrained model for finetuning  
 ├── __clustering.py__ mean-shift clustering  
 ├── __datagenerator.py__ feeds data for training and evaluation  
 ├── __enet.py__ [Enet architecture](https://github.com/kwotsin/TensorFlow-ENet)  
@@ -23,20 +23,21 @@ Tensorflow implementation of [Semantic Instance Segmentation with a Discriminati
 ### Instructions
 
 #### Inference
-1. To test the inference of the trained model execute:
+1. To test the inference of the trained model execute:  
 `python inference.py --modeldir trained_model`
 
 #### Training
 
-1. Download the [TuSimple training dataset](http://benchmark.tusimple.ai/#/t/1) and extract its contents to the `data` folder. This should create the following folder structure:  
-├── data  
-│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   ├── images  
-│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   ├── labels  
+1. Download the [TuSimple training dataset](http://benchmark.tusimple.ai/#/t/1) and extract its contents to the `data` folder.
 2. Run the following script to prepare images and labels.  
-`python tusimple_dataset_processing.py <train_data_dir>`
+`python data/tusimple_dataset_processing.py <train_data_dir>`  
+This should create the following folder structure:  
+├── data  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── images  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── labels  
 3. For training on the dataset execute:  
 `python training.py`  
-alternatively with optional parameters (default parameters in this example):   
+alternatively use optional parameters (default parameters in this example):   
 `python training --srcdir data --modeldir pretrained_semantic_model --outdir saved_model --logdir log --epochs 50 --var 1.0 --dist 1.0 --reg 1.0 --dvar 0.5 --ddist 1.5
 `
 4. To test the trained network execute:
