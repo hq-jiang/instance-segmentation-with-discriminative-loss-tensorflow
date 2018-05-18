@@ -54,8 +54,8 @@ alternatively use optional parameters (default parameters in this example):
 
 ### Training Pipeline
 <img src="./doc/training_pipeline.png" width="1000px">
-### Results
 
+### Results
 <img src="./inference_test/results/cluster_0000.png" width="300px">
 <img src="./inference_test/results/cluster_0001.png" width="300px">
 <img src="./inference_test/results/cluster_0002.png" width="300px">
