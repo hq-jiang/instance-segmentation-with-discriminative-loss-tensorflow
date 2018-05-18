@@ -6,6 +6,7 @@ Tensorflow implementation of [Semantic Instance Segmentation with a Discriminati
 ### Files
 ├── __data__ here the data should be stored  
 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   └── __tusimple_dataset_processing.py__ processes the TuSimple dataset  
+├── __doc__ documentation  
 ├── __inference_test__ inference related data  
 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   └── __images__ for testing the inference    
 ├── __trained_model__  pretrained model for finetuning  
@@ -62,13 +63,13 @@ alternatively use optional parameters (default parameters in this example):
 <img src="./inference_test/results/cluster_0004.png" width="300px">
 <img src="./inference_test/results/cluster_0005.png" width="300px">
 
-#### Todo
+### Todo
 - pip requirements
-- writeup
-- images
 
 Tensorflow version 1.2
 
-### References
-Credits to this [Enet](https://github.com/kwotsin/TensorFlow-ENet) implementation  
-[TuSimple dataset](http://benchmark.tusimple.ai/#/t/1)
+### Reference and Credits
+This application uses Open Source components. We acknowledge and are grateful to these developers for their contributions to open source:
+- Project: TensorFlow-ENet https://github.com/kwotsin/TensorFlow-ENet  
+- Project: TuSimple datase http://benchmark.tusimple.ai
+- Project: Fast Scene Understanding https://github.com/DavyNeven/fastSceneUnderstanding
