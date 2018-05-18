@@ -51,6 +51,17 @@ alternatively use optional parameters (default parameters in this example):
 4. To test the trained network execute:
 `python inference.py --modeldir saved_model`
 
+### Training Pipeline
+<img src="./doc/training_pipeline.png" width="1000px">
+### Results
+
+<img src="./inference_test/results/cluster_0000.png" width="300px">
+<img src="./inference_test/results/cluster_0001.png" width="300px">
+<img src="./inference_test/results/cluster_0002.png" width="300px">
+<img src="./inference_test/results/cluster_0003.png" width="300px">
+<img src="./inference_test/results/cluster_0004.png" width="300px">
+<img src="./inference_test/results/cluster_0005.png" width="300px">
+
 #### Todo
 - pip requirements
 - writeup
