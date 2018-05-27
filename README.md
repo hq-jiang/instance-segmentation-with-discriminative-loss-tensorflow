@@ -58,23 +58,11 @@ alternatively use optional parameters (default parameters in this example):
 ### Training Visualization
 Feature space projection of one image for consecutive gradient steps. Each point represents one pixel embedding and each color represents an instance in the label.
 
-<img src="./doc/cluster_000000.png" width="200px">
-<img src="./doc/cluster_001000.png" width="200px">
-<img src="./doc/cluster_002000.png" width="200px">
-<img src="./doc/cluster_012000.png" width="200px">
-<img src="./doc/cluster_015000.png" width="200px">
-<img src="./doc/cluster_016000.png" width="200px">
-<img src="./doc/cluster_017000.png" width="200px">
-<img src="./doc/cluster_018000.png" width="200px">
+<img src="./doc/cluster_000000.png" width="200px"><img src="./doc/cluster_001000.png" width="200px"><img src="./doc/cluster_002000.png" width="200px"><img src="./doc/cluster_012000.png" width="200px"><img src="./doc/cluster_015000.png" width="200px"><img src="./doc/cluster_016000.png" width="200px"><img src="./doc/cluster_017000.png" width="200px"><img src="./doc/cluster_018000.png" width="200px">
 
 
 ### Results
-<img src="./inference_test/results/cluster_0000.png" width="300px">
-<img src="./inference_test/results/cluster_0001.png" width="300px">
-<img src="./inference_test/results/cluster_0002.png" width="300px">
-<img src="./inference_test/results/cluster_0003.png" width="300px">
-<img src="./inference_test/results/cluster_0004.png" width="300px">
-<img src="./inference_test/results/cluster_0005.png" width="300px">
+<img src="./inference_test/results/cluster_0000.png" width="300px"><img src="./inference_test/results/cluster_0001.png" width="300px"><img src="./inference_test/results/cluster_0002.png" width="300px"><img src="./inference_test/results/cluster_0003.png" width="300px"><img src="./inference_test/results/cluster_0004.png" width="300px"><img src="./inference_test/results/cluster_0005.png" width="300px">
 
 
 
