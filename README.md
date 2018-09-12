@@ -78,3 +78,6 @@ This application uses Open Source components. We acknowledge and are grateful to
 - Project: TensorFlow-ENet https://github.com/kwotsin/TensorFlow-ENet  
 - Project: TuSimple dataset http://benchmark.tusimple.ai
 - Project: Fast Scene Understanding https://github.com/DavyNeven/fastSceneUnderstanding
+
+### Related work
+- Paper: [Towards End-to-End Lane Detection: an Instance Segmentation Approach](https://arxiv.org/abs/1802.05591)
